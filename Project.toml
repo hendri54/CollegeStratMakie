@@ -1,0 +1,13 @@
+name = "CollegeStratMakie"
+uuid = "32a31e0c-6007-4c9d-b9d4-39ee3e8faef4"
+authors = ["hendri54 <hendricksl@protonmail.com> and contributors"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
