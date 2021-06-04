@@ -109,7 +109,8 @@ function line_plot_test()
         nx = 7;
         xV = LinRange(-2.0, 1.5, nx);
         yM = LinRange(0.3, 0.5, nx) .+ LinRange(1.0, 0.5, 4)';
-        p, _ = line_plot(xV, yM; xlabel = "x");
+        p, ax = line_plot(xV, yM; xlabel = "x", 
+            labelV = ["Lbl $j" for j = 1 : 4], legPos = :below);
         figsave(p, fPath);
         @test isfile(fPath);
 
