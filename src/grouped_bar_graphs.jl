@@ -48,7 +48,8 @@ function grouped_bar_graph!(ax :: Axis, dataM :: AbstractMatrix{F};
     grps = groups_from_rows(nr, nc);
     bars = bars_from_columns(nr, nc);
     barplot!(ax, xV, vec(dataM); 
-        dodge = grps, color = get_colors(bars, nc), 
+        dodge = grps, color = get_colors(bars, nc),
+        # color = bars, colorrange = (1, nc), 
         args...);
 
     add_grouped_errorbars!(xV, dataM, yerror, grps);
@@ -58,7 +59,7 @@ end
 # should be improved and be more robust +++
 function add_grouped_errorbars!(xV, dataM, yerror, grps)
     crossbar!(xV, vec(dataM), vec(dataM) .- vec(yerror), vec(dataM) .+ vec(yerror); 
-        dodge = grps, color = :gray50);
+        dodge = grps, color = (:gray50, 0.35));
 end
 
 add_grouped_errorbars!(xV, dataM, yerror :: Nothing, grps) = nothing;

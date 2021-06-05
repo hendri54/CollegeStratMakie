@@ -27,9 +27,19 @@ end
 
 Multi-line plot from data matrix. Columns are series.
 
+This is really the same as `Makie.series`.
+
 # Arguments
 
 - legPos: `:below` places a legend below the graph (in a new frame).
+- labelV: labels for legend (optional).
+
+# Example
+
+```julia
+fig, ax = line_plot(1:4, rand(4,3); labelV = ["Lbl \$j" for j = 1 : 3]);
+axislegend()
+```
 """
 function line_plot(xV, yM :: AbstractMatrix{F}; 
     fig = blank_plot(), pos = (1,1),
@@ -41,7 +51,11 @@ function line_plot(xV, yM :: AbstractMatrix{F};
     nr, nc = size(yM);
     @assert nr == length(xV);
     for j = 1 : nc
-        add_line!(ax, xV, yM[:, j]; label = get_idx(args[:labelV], j), args...);
+        add_line!(ax, xV, yM[:, j]; 
+            label = get_idx(args[:labelV], j), 
+            color = get_colors(fill(j, nr), nc),
+            # color = fill(j, nr), colorrange = (1, nc),
+            args...);
     end
     if !isnothing(args[:labelV])  &&  (legPos == :below)
         legPos = (pos[1] + 1, pos[2]);

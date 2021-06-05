@@ -8,7 +8,7 @@ using CollegeStratBase
 # Helpers
 export blank_plot, make_axis, make_legend, add_title!
 # Settings
-export default_theme, plot_defaults
+export default_theme, plot_defaults, get_colors
 # Saving
 export figsave
 # Bar graphs

@@ -1,3 +1,9 @@
+scatter_defaults() = Dict([
+    :strokewidth => 0,
+    :color => main_color()
+]);
+
+
 """
 	$(SIGNATURES)
 
@@ -6,9 +12,9 @@ Line graph. Simple wrapper around `lines`.
 function scatter_plot(xV, yV :: AbstractVector{F};
     fig = blank_plot(), pos = (1,1), kwargs ...) where F
 
-    args = merge(bar_defaults(), kwargs);
+    args = merge(scatter_defaults(), kwargs);
     ax = fig[pos...] = Axis(fig; args...);
-    scatter!(ax, xV, yV; kwargs...);
+    scatter!(ax, xV, yV; args...);
     return fig, ax
 end
 
@@ -16,14 +22,14 @@ function scatter_plot(yV :: AbstractVector{F}; kwargs ...) where F
     return scatter_plot(1 : length(yV), yV; kwargs...);
 end
 
-function scatter_plot(xV, yM :: AbstractMatrix{F}; kwargs...) where F
+function scatter_plot(xV, yM :: AbstractMatrix{F};
+    fig = blank_plot(), pos = (1,1), kwargs...) where F
     nr, nc = size(yM);
     @assert nr == length(xV);
-    fig, ax = scatter_plot(xV, yM[:,1]; kwargs...);
-    if nc > 1
-        for j = 2 : nc
-            add_scatter!(ax, xV, yM[:, j]);
-        end
+    args = merge(scatter_defaults(), kwargs);
+    ax = make_axis(fig, pos; args...);
+    for j = 1 : nc
+        add_scatter!(ax, xV, yM[:, j]; args..., color = get_colors(j, nc));
     end
     return fig, ax
 end

@@ -31,11 +31,12 @@ function bar_graph!(ax :: Axis, dataV; yerror = nothing, kwargs...)
 end
 
 add_errorbars!(dataV, yerror) = 
-    errorbars!(1 : length(dataV), dataV, yerror, whiskerwidth = 10);
+    errorbars!(1 : length(dataV), dataV, yerror; whiskerwidth = 10);
 add_errorbars!(dataV, yerror :: Nothing) = nothing;
 
 bar_defaults() = Dict([
     :strokewidth => 0,
+    :color => main_color()
 ]);
 
 

@@ -116,8 +116,8 @@ function line_plot_test()
 
         fPath2, _ = fig_test_setup("add_line_test.pdf");
         yV = xV .+ 0.5;
-        p, ax = line_plot(xV, yV; ylabel = "y");
-        add_line!(ax, xV, yV .+ 1.0);
+        p, ax = line_plot(xV, yV; ylabel = "y", color = get_colors(1, 2));
+        add_line!(ax, xV, yV .+ 1.0; color = get_colors(2, 2));
         figsave(p, fPath2);
         @test isfile(fPath2);
     end
@@ -136,7 +136,7 @@ function scatter_plot_test()
         fPath2, _ = fig_test_setup("add_scatter_test.pdf");
         yV = xV .+ 0.5;
         p, ax = scatter_plot(xV, yV; ylabel = "y");
-        add_scatter!(ax, xV, yV .+ 1.0);
+        add_scatter!(ax, xV, yV .+ 1.0; color = get_colors(2, 2));
         figsave(p, fPath2);
         @test isfile(fPath2);
     end

@@ -28,7 +28,7 @@ function subplots(plotFctV; figTitle = nothing, kwargs...)
     axV = Vector{Axis}(undef, nPlots);
     for (j, plotFct) in enumerate(plotFctV)
         pos = subplot_pos(j, nRows, nCols);
-        ax = plotFct(fig, pos; args...);
+        ax = plotFct(fig, pos; color = main_color(), args...);
         if ax isa Axis
             axV[j] = ax;
         end

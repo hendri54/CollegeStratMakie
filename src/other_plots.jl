@@ -12,6 +12,7 @@ end
 
 histogram_defaults() = Dict([
     :strokewidth => 0,
+    :color => main_color()
 ]);
 
 
