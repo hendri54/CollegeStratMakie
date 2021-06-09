@@ -34,6 +34,8 @@ This is really the same as `Makie.series`.
 - legPos: `:below` places a legend below the graph (in a new frame).
 - labelV: labels for legend (optional).
 
+Fix: Legend colors are wrong +++
+
 # Example
 
 ```julia
@@ -53,7 +55,7 @@ function line_plot(xV, yM :: AbstractMatrix{F};
     for j = 1 : nc
         add_line!(ax, xV, yM[:, j]; 
             label = get_idx(args[:labelV], j), 
-            color = get_colors(fill(j, nr), nc),
+            color = get_colors(j, nc),  # (fill(j, nr), nc),
             # color = fill(j, nr), colorrange = (1, nc),
             args...);
     end
@@ -83,7 +85,11 @@ add_line!(p :: Makie.FigureAxisPlot, x, y; kwargs...) =
 """
 	$(SIGNATURES)
 
-Add error band
+Add error band. 
+
+How to get these colored is not clear. Adding 
+`color = (get_colors(j, n), 0.2)`
+achieves transparency, but no color (all grey).
 """
 add_error_band!(ax :: Axis, x, y, errorV; kwargs...) = 
     band!(ax, x, y .- errorV, y .+ errorV; kwargs...)

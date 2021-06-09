@@ -73,9 +73,11 @@ bars_from_columns(nr, nc) = repeat(1 : nc; inner = (nr,));
 	$(SIGNATURES)
 
 Places a legend into Axis `ax`. Uses the same colors as for grouped bar graph.
-`title` cannot be "". That throws an error.
+`title` cannot be "". That throws an error. Useful not just for grouped bar graphs, but also for any kind of subplot.
 
 This needs to be plotted into a blank axis. Otherwise the legend position is odd.
+
+For horizontal legends: `tellheight = true` prevents vertical spacing issues.
 
 Should be improved +++.
 
@@ -83,7 +85,7 @@ Should be improved +++.
 
 ```julia
 fig, ax = grouped_bar_graph(["1", "2"], rand(2, 3));
-grouped_bar_legend(fig[2, 1], colLabelV; orientation = :horizontal);
+grouped_bar_legend(fig[2, 1], colLabelV; orientation = :horizontal, tellheight = true);
 ```
 """
 function grouped_bar_legend(ax, labelV; title = " ", kwargs...)

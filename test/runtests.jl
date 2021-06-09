@@ -123,6 +123,24 @@ function line_plot_test()
     end
 end
 
+function line_error_bands_test()
+    @testset "Line error bands" begin
+        nx = 7;
+        ny = 4;
+        xV = LinRange(-2.0, 1.5, nx);
+        yM = LinRange(0.3, 0.5, nx) .+ LinRange(1.0, 0.5, ny)';
+        p, ax = line_plot(xV, yM; xlabel = "x", 
+            labelV = ["Lbl $j" for j = 1 : ny], legPos = :below);
+        for iy = 1 : ny
+            add_error_band!(ax, xV, yM[:,iy], LinRange(0.05, 0.1, nx);
+                color = (get_colors(iy, ny), 0.2));
+        end
+        fPath3, _ = fig_test_setup("line_error_bands.pdf");
+        figsave(p, fPath3);
+        @test isfile(fPath3);
+    end
+end
+
 function scatter_plot_test()
     @testset "Line plot" begin
         fPath, notesPath = fig_test_setup("scatter_plot_test.pdf");
@@ -148,6 +166,7 @@ end
     grouped_bar_test();
     bar_graph_test();
     line_plot_test();
+    line_error_bands_test();
     scatter_plot_test();
     contour_test();
     histogram_test();

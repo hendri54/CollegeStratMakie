@@ -1,3 +1,5 @@
+using CollegeStratMakie, Test
+
 function subplot_test(grouped :: Bool)
     @testset "Subplots" begin
         nPlots = 4;
@@ -25,6 +27,12 @@ function subplot_test(grouped :: Bool)
                 ylabel = "y lbl",
                 xticks = (2 : 2 : nx, xTickLbls[2 : 2 : nx]));
         end
+
+        if grouped
+            grouped_bar_legend(fig[nr+1, :], ["Lbl $j" for j = 1 : ny];
+                orientation = :horizontal, tellheight = true);
+        end
+
         fPath, notesPath = fig_test_setup("subplots_test$suffix.pdf");
         figsave(fig, fPath);
         @test isfile(fPath)
