@@ -116,8 +116,10 @@ function line_plot_test()
 
         fPath2, _ = fig_test_setup("add_line_test.pdf");
         yV = xV .+ 0.5;
-        p, ax = line_plot(xV, yV; ylabel = "y", color = get_colors(1, 2));
+        p, ax = line_plot(xV, yV; ylabel = "y", color = get_colors(1, 2),
+            ylims = (0, nothing));
         add_line!(ax, xV, yV .+ 1.0; color = get_colors(2, 2));
+        # ylims!(ax, 0, nothing);
         figsave(p, fPath2);
         @test isfile(fPath2);
     end
