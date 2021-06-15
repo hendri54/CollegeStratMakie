@@ -16,6 +16,7 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 [compat]
 CairoMakie = "0.5.7, 0.6"
 ColorSchemes = "3.12"
+DocStringExtensions = "0.8"
 FileIO = "1.9"
 Makie = "0.13, 0.14"
 StatsBase = "0.33"
