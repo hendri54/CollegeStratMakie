@@ -1,7 +1,7 @@
 name = "CollegeStratMakie"
 uuid = "32a31e0c-6007-4c9d-b9d4-39ee3e8faef4"
 authors = ["hendri54 <hendricksl@protonmail.com> and contributors"]
-version = "0.2.7"
+version = "0.2.8"
 
 [deps]
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
