@@ -81,10 +81,7 @@ end
 ```
 """
 function subplot_layout(nPlots)
-    if nPlots == 2
-        nRows = 1;
-        nCols = 2;
-    elseif nPlots == 3
+    if nPlots <= 3
         nRows = 1;
         nCols = nPlots;
     elseif nPlots == 4
