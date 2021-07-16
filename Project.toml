@@ -18,7 +18,7 @@ CairoMakie = "0.5.7, 0.6"
 ColorSchemes = "3.12"
 DocStringExtensions = "0.8"
 FileIO = "1.9"
-Makie = "0.13, 0.14"
+Makie = "0.13, 0.14, 0.15"
 StatsBase = "0.33"
 julia = "^1.5"
 
