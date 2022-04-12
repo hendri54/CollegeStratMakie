@@ -1,7 +1,7 @@
 module CollegeStratMakie
 
 using DocStringExtensions, FileIO, StatsBase
-using CairoMakie, Makie, ColorSchemes
+using CairoMakie, ColorSchemes
 using FilesLH
 using CollegeStratBase
 

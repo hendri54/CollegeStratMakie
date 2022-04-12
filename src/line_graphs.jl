@@ -91,8 +91,13 @@ How to get these colored is not clear. Adding
 `color = (get_colors(j, n), 0.2)`
 achieves transparency, but no color (all grey).
 """
-add_error_band!(ax :: Axis, x, y, errorV; kwargs...) = 
-    band!(ax, x, y .- errorV, y .+ errorV; kwargs...)
+function add_error_band!(ax :: Axis, x, y, errorV; kwargs...)
+    @assert all(errorV .>= 0.0)  "Negative errors";
+    @assert size(x) == size(y) == size(errorV); # This may be too restrictive +++
+    if any(errorV .> 0.0)
+        band!(ax, x, y .- errorV, y .+ errorV; kwargs...);
+    end
+end
 
 add_error_band!(ax :: Axis, x, y, errorV :: Nothing; kwargs...) = nothing;
 
