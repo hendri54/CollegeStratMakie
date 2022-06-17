@@ -103,6 +103,21 @@ function contour_test()
 end
 
 
+# new +++++
+# function line_test()
+#     fPath = "/Users/lutz/Documents/projects/p2019/college_stratification/CollegeStratMakie/test_files/line_test.pdf";
+#     # fig = blank_plot();
+#     fig = Figure();
+#     # kwargs = mdl.axis_args(; ylabel = "y label");
+#     # ax = Axis(fig); # ; kwargs...);
+#     ax = make_axis(fig, (1,1); xlabel = "x label", ylabel = "y label",
+#         invalidOption = :ignored);
+#     lines!(ax, collect(1:10), LinRange(1.0, 3.0, 10));
+#     save(fPath, fig)
+#     # figsave(fig, fPath);
+# end
+
+
 function line_plot_test()
     @testset "Line plot" begin
         fPath, notesPath = fig_test_setup("line_plot_test.pdf");

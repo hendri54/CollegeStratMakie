@@ -3,6 +3,8 @@ scatter_defaults() = Dict([
     :color => main_color()
 ]);
 
+scatter_keys() = (:color, :strokewidth);
+
 
 """
 	$(SIGNATURES)
@@ -12,8 +14,9 @@ Line graph. Simple wrapper around `lines`.
 function scatter_plot(xV, yV :: AbstractVector{F};
     fig = blank_plot(), pos = (1,1), kwargs ...) where F
 
-    args = merge(scatter_defaults(), kwargs);
-    ax = fig[pos...] = Axis(fig; args...);
+    ax = make_axis(fig, pos; kwargs...);
+    # ax = fig[pos...] = Axis(fig; args...);
+    args = make_args(scatter_defaults(), scatter_keys(); kwargs...);
     scatter!(ax, xV, yV; args...);
     return fig, ax
 end
@@ -26,10 +29,9 @@ function scatter_plot(xV, yM :: AbstractMatrix{F};
     fig = blank_plot(), pos = (1,1), kwargs...) where F
     nr, nc = size(yM);
     @assert nr == length(xV);
-    args = merge(scatter_defaults(), kwargs);
-    ax = make_axis(fig, pos; args...);
+    ax = make_axis(fig, pos; kwargs...);
     for j = 1 : nc
-        add_scatter!(ax, xV, yM[:, j]; args..., color = get_colors(j, nc));
+        add_scatter!(ax, xV, yM[:, j]; kwargs..., color = get_colors(j, nc));
     end
     return fig, ax
 end
@@ -41,7 +43,8 @@ end
 Add line to a plot.
 """
 function add_scatter!(ax :: Axis, x, y; kwargs...)
-    scatter!(ax, x, y; kwargs...);
+    args = merge(scatter_defaults(), kwargs);
+    scatter!(ax, x, y; args...);
 end
 
 add_scatter!(p :: Makie.FigureAxisPlot, x, y; kwargs...) = 

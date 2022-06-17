@@ -2,6 +2,8 @@ grouped_bar_defaults() = Dict([
     :strokewidth => 0,
 ]);
 
+grouped_bar_keys() = (:color, :strokewidth, :xticks);
+
 
 """
 	$(SIGNATURES)
@@ -22,9 +24,8 @@ function grouped_bar_graph(
 
     ng = length(xStrV);
     @assert size(xStrV, 1) == size(dataM, 1)  "Size mismatch: $(size(xStrV)), $(size(dataM))";
-    args = merge(grouped_bar_defaults(), kwargs);
     ax = make_axis(fig, pos;
-        xticks = (1 : ng, xStrV), args...);
+        xticks = (1 : ng, xStrV), kwargs...);
 
     grouped_bar_graph!(ax, dataM; yerror = yerror, kwargs...);
     return fig, ax
@@ -42,7 +43,7 @@ function grouped_bar_graph!(ax :: Axis, dataM :: AbstractMatrix{F};
     if !isnothing(yerror)
         @assert size(yerror) == size(dataM)  "Size mismatch yerror";
     end
-    args = merge(grouped_bar_defaults(), kwargs);
+    args = make_args(grouped_bar_defaults(), grouped_bar_keys(); kwargs...);
     nr, nc = size(dataM);
     xV = repeat(1 : nr; outer = (nc,));
     grps = groups_from_rows(nr, nc);

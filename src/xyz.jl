@@ -39,7 +39,7 @@ function grouped_bar_xyz(xyzM :: AbstractArray{F1, 3}, xyzLabelV;
             fig = fig, pos = pos);
         # makie +++   legendPos = subLegPos,  legendV = make_legend(xyzLabelV[legendIdx]),
     end
-    link_axes(axV...);
+    link_axes(axV);
     # p = plot(pV..., link = :all);
     return fig, axV
 end

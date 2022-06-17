@@ -2,22 +2,25 @@ line_defaults() = Dict{Symbol, Any}([
     :labelV => nothing
     ]);
 
+line_keys() = (:color, );
+
 """
 	$(SIGNATURES)
 
 Line graph. Simple wrapper around `lines`.
 """
 function line_plot(xV, yV :: AbstractVector{F};
-    fig = blank_plot(), pos = (1,1), kwargs ...) where F
+    fig = blank_plot(), pos = (1,1), kwargs...) where F
 
-    args = merge(line_defaults(), kwargs);
-    ax = make_axis(fig, pos; args...);
+    # args = merge(line_defaults(), kwargs);
+    ax = make_axis(fig, pos; kwargs...);
+    args = make_args(line_defaults(), line_keys(); kwargs...);
     lines!(ax, xV, yV; args...);
     return fig, ax
 end
 
 function line_plot(yV :: AbstractVector{F}; 
-    fig = blank_plot(), pos = (1,1), kwargs ...) where F
+    fig = blank_plot(), pos = (1,1), kwargs...) where F
     return line_plot(1 : length(yV), yV; fig = fig, pos = pos, kwargs...);
 end
 
@@ -45,27 +48,36 @@ axislegend()
 """
 function line_plot(xV, yM :: AbstractMatrix{F}; 
     fig = blank_plot(), pos = (1,1),
-    legPos = :none,
+    legPos = :none, labelV = nothing,
     kwargs...) where F
 
-    args = merge(line_defaults(), kwargs);
-    ax = make_axis(fig, pos; args...);
-    nr, nc = size(yM);
-    @assert nr == length(xV);
-    for j = 1 : nc
-        add_line!(ax, xV, yM[:, j]; 
-            label = get_idx(args[:labelV], j), 
-            color = get_colors(j, nc),  # (fill(j, nr), nc),
-            # color = fill(j, nr), colorrange = (1, nc),
-            args...);
-    end
-    if !isnothing(args[:labelV])  &&  (legPos == :below)
+    # args = merge(line_defaults(), kwargs);
+    ax = make_axis(fig, pos; kwargs...);
+    line_plot!(ax, xV, yM; labelV, kwargs...);
+
+    if !isnothing(labelV)  &&  (legPos == :below)
         legPos = (pos[1] + 1, pos[2]);
         fig[legPos...] = Legend(fig, ax; 
             orientation = :horizontal, 
             tellwidth = false, tellheight = true);
     end
     return fig, ax
+end
+
+function line_plot!(ax, xV, yM :: AbstractMatrix{F}; 
+        labelV = nothing, kwargs...) where F
+    args = make_args(line_defaults(), line_keys(); kwargs...);
+    nr, nc = size(yM);
+    @assert nr == length(xV);
+    for j = 1 : nc
+        sLabel = isnothing(labelV)  ?  (nothing)  :  (labelV[j]);
+        @show sLabel
+        add_line!(ax, xV, yM[:, j]; 
+            label = sLabel, 
+            color = get_colors(j, nc),  # (fill(j, nr), nc),
+            # color = fill(j, nr), colorrange = (1, nc),
+            args...);
+    end
 end
 
 

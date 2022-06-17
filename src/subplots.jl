@@ -14,10 +14,9 @@ end
 Make a plot that contains several subplots.
 
 # Arguments
-
 - `plotFctV`:  Vector of functions that generate each plot.
     Function signature: `ax = plotFct(fig, pos; kwargs...)`.
-    If `plotFct` does not return an `Axis`, `axV` remains empty.
+    If `plotFct` does not return an `Axis`, `axV` remains `missing`.
 - `figTitle`: Title for entire figure. `nothing` is ignored.
 """
 function subplots(plotFctV; figTitle = nothing, kwargs...)
@@ -25,12 +24,14 @@ function subplots(plotFctV; figTitle = nothing, kwargs...)
     fig = blank_plot(; args...);
     nPlots = length(plotFctV);
     nRows, nCols = subplot_layout(nPlots);
-    axV = Vector{Axis}(undef, nPlots);
+    axV = Vector{Union{Axis, Missing}}(undef, nPlots);
     for (j, plotFct) in enumerate(plotFctV)
         pos = subplot_pos(j, nRows, nCols);
         ax = plotFct(fig, pos; color = main_color(), args...);
         if ax isa Axis
             axV[j] = ax;
+        else
+            axV[j] = missing;
         end
     end
     add_title!(fig, figTitle);
@@ -115,9 +116,17 @@ end
 """
 	$(SIGNATURES)
 
-Link the given axes.
+Link the given axes. First argument is a `Vector{Axis}`. Elements that are not `Axis` are ignored.
 """
-link_axes(args...) = linkaxes!(args...);
+function link_axes(axV :: AbstractVector{T}) where T 
+    ax2V = filter(ax -> isa(ax, Axis), axV);
+    if length(ax2V) > 1
+        linkaxes!(ax2V...);
+    end
+end
+
+link_axes(args...) = link_axes([args...]);
+
 
 """
 	$(SIGNATURES)

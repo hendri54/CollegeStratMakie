@@ -11,10 +11,9 @@ function bar_graph(groupLabelV, dataV;
     fig = Figure(), pos = (1,1), yerror = nothing, kwargs...)
     
     @assert size(dataV) == size(groupLabelV);
-    args = merge(bar_defaults(), kwargs);
     n = length(groupLabelV);
-    ax = make_axis(fig, pos; xticks = (1:n, string.(groupLabelV)), args...);
-    barplot!(ax, dataV; args...);
+    ax = make_axis(fig, pos; xticks = (1:n, string.(groupLabelV)), kwargs...);
+    barplot!(ax, dataV; kwargs...);
     add_errorbars!(dataV, yerror);
     return fig, ax
 end
@@ -25,7 +24,8 @@ end
 Plots bar graph into existing axis or FigurePosition.
 """
 function bar_graph!(ax :: Axis, dataV; yerror = nothing, kwargs...)
-    args = merge(bar_defaults(), kwargs);
+    args = make_args(bar_defaults(), bar_keys(); kwargs...);
+    # args = merge(bar_defaults(), kwargs);
     barplot!(ax, dataV;  args...);
     add_errorbars!(dataV, yerror);
 end
@@ -38,6 +38,8 @@ bar_defaults() = Dict([
     :strokewidth => 0,
     :color => main_color()
 ]);
+
+bar_keys() = (:color, :strokewidth);
 
 
 function test_bar_graph()
