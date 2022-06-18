@@ -1,12 +1,3 @@
-function subplot_defaults()
-    textSize = 8;
-    return Dict{Symbol, Any}([
-        :xticklabelsize => textSize,
-        :yticklabelsize => textSize,
-        :xlabelsize => textSize,
-        :ylabelsize => textSize
-    ])
-end
 
 """
 	$(SIGNATURES)
@@ -15,19 +6,19 @@ Make a plot that contains several subplots.
 
 # Arguments
 - `plotFctV`:  Vector of functions that generate each plot.
-    Function signature: `ax = plotFct(fig, pos; kwargs...)`.
+    Function signature: `ax = plotFct(fig, pos; color)`.
     If `plotFct` does not return an `Axis`, `axV` remains `missing`.
 - `figTitle`: Title for entire figure. `nothing` is ignored.
 """
 function subplots(plotFctV; figTitle = nothing, kwargs...)
-    args = merge(subplot_defaults(), kwargs);
-    fig = blank_plot(; args...);
+    # args = merge(subplot_defaults(), kwargs);
+    fig = blank_plot();  # ; args...);
     nPlots = length(plotFctV);
     nRows, nCols = subplot_layout(nPlots);
     axV = Vector{Union{Axis, Missing}}(undef, nPlots);
     for (j, plotFct) in enumerate(plotFctV)
         pos = subplot_pos(j, nRows, nCols);
-        ax = plotFct(fig, pos; color = main_color(), args...);
+        ax = plotFct(fig, pos; color = main_color());
         if ax isa Axis
             axV[j] = ax;
         else
@@ -47,14 +38,14 @@ Makes Axis objects so that subplots can be written into Figure fig.
 It is generally better to make axes one by one.
 """
 function make_axes!(fig, nPlots :: Integer; kwargs...)
-    args = merge(subplot_defaults(), kwargs);
+    # args = make_args(subplot_defaults(), subplot_keys(); kwargs...);
     nr, nc = subplot_layout(nPlots);
     axV = Vector{Any}(undef, nPlots);
     for ir = 1 : nr
         for ic = 1 : nc
             if (ir * ic) <= nPlots
                 j = (ir-1) * nc + ic;
-                axV[j] = fig[ir, ic] = Axis(fig; args...);
+                axV[j] = make_axis(fig, (ir, ic); forSubPlot = true, kwargs...);
             end
         end
     end

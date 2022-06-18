@@ -71,7 +71,6 @@ function line_plot!(ax, xV, yM :: AbstractMatrix{F};
     @assert nr == length(xV);
     for j = 1 : nc
         sLabel = isnothing(labelV)  ?  (nothing)  :  (labelV[j]);
-        @show sLabel
         add_line!(ax, xV, yM[:, j]; 
             label = sLabel, 
             color = get_colors(j, nc),  # (fill(j, nr), nc),
@@ -112,5 +111,18 @@ function add_error_band!(ax :: Axis, x, y, errorV; kwargs...)
 end
 
 add_error_band!(ax :: Axis, x, y, errorV :: Nothing; kwargs...) = nothing;
+
+
+## ------------  Testing
+
+function test_line_plot(; forSubPlot = false)
+    nx = 7;
+    xV = LinRange(-2.0, 1.5, nx);
+    yM = LinRange(0.3, 0.5, nx) .+ LinRange(1.0, 0.5, 4)';
+    p, ax = line_plot(xV, yM; 
+        forSubPlot, xlabel = "x", 
+        labelV = ["Lbl $j" for j = 1 : 4], legPos = :below);
+    return p, ax
+end
 
 # -----------

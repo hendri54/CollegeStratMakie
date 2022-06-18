@@ -3,9 +3,10 @@
 
 Histogram.
 """
-function histogram_plot(dataV; fig = blank_plot(), pos = (1,1), kwargs...)
-    args = merge(histogram_defaults(), kwargs);
-    ax = fig[pos...] = Axis(fig; args...);
+function histogram_plot(dataV; 
+        fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...)
+    ax = make_axis(fig, pos; forSubPlot, kwargs...);
+    args = make_args(histogram_defaults(), histogram_keys(); kwargs...);
     hist!(ax, dataV; args...); 
     return fig, ax
 end
@@ -15,15 +16,18 @@ histogram_defaults() = Dict([
     :color => main_color()
 ]);
 
+histogram_keys() = (:color, :strokewidth);
+
 
 """
 	$(SIGNATURES)
 
 Contour plot.
 """
-function contour_plot(x, y, z; fig = blank_plot(), pos = (1,1), kwargs...)
-    args = merge(contour_defaults(), kwargs);
-    ax = make_axis(fig, pos; args...);
+function contour_plot(x, y, z;
+        fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...)
+    ax = make_axis(fig, pos; forSubPlot, kwargs...);
+    args = make_args(contour_defaults(), contour_keys(); kwargs...);
     contour!(ax, x, y, z; args...);
     return fig, ax
 end
@@ -32,6 +36,7 @@ contour_defaults() = Dict([
     :linewidth => 3,
 ]);
 
+contour_keys() = (:color, :linewidth);
 
 
 # ----------------

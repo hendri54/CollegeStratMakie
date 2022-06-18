@@ -33,7 +33,7 @@ function subplot_test(grouped :: Bool)
                 orientation = :horizontal, tellheight = true);
         end
 
-        fPath, notesPath = fig_test_setup("subplots_test$suffix.pdf");
+        fPath, notesPath = fig_test_setup("subplots$suffix");
         figsave(fig, fPath);
         @test isfile(fPath)
     end
@@ -58,14 +58,14 @@ function subplot2_test()
                 end
             end
         end
-        fPath, notesPath = fig_test_setup("subplots2_test.pdf");
+        fPath, notesPath = fig_test_setup("subplots2");
         figsave(fig, fPath);
         @test isfile(fPath)
     end
 end
 
 function plot_fct(fig, pos; kwargs...)
-    ax = make_axis(fig, pos; kwargs...);
+    ax = make_axis(fig, pos; forSubPlot = true,  kwargs...);
     add_line!(ax, 1:10, 1:10; kwargs...);
     return ax
 end
@@ -76,7 +76,7 @@ function subplot_fct_test()
         plotFctV = [(x,y; kwargs...) -> plot_fct(x,y; xlabel = "x$j", kwargs...)  
             for j = 1 : nPlots];
         fig, axV = subplots(plotFctV; figTitle = "Title");
-        fPath, notesPath = fig_test_setup("subplot_fct_test.pdf");
+        fPath, notesPath = fig_test_setup("subplot_fct");
         figsave(fig, fPath);
         @test isfile(fPath)
     end

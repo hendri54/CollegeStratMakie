@@ -36,17 +36,17 @@ function plot_regressions(coeffNameV, regrLabelV,
             pos = subplot_pos(iReg, nr, nc);
             # No point having intercept as text here. It gets its own plot.
             plot_regression(string.(regrLabelV), coeffNameV[iReg], 
-                coeffM[iReg,:], seM[iReg,:]; fig = p, pos = pos,
-                forSubPlot = true);
+                coeffM[iReg,:], seM[iReg,:]; 
+                fig = p, pos,  forSubPlot = true);
         end
         add_title!(p, figTitle);
     end
     return p
 end
 
-function plot_regression(xStrV, yStr, coeffV :: AbstractVector{F1}, 
-    seV :: AbstractVector{F1}; 
-    fig = blank_plot(), pos = (1,1), 
+function plot_regression(xStrV, yStr, 
+    coeffV :: AbstractVector{F1},  seV :: AbstractVector{F1}; 
+    fig = blank_plot(), pos = (1,1), forSubPlot = false,
     interceptAsText :: Bool = false,
     interceptName = :cons,
     kwargs...) where F1 <: AbstractFloat
@@ -64,7 +64,8 @@ function plot_regression(xStrV, yStr, coeffV :: AbstractVector{F1},
         seV = seV[idxV];
     end
 
-    _, ax = bar_graph(xStrV[idxV], coeffV[idxV]; fig = fig, pos = pos, 
+    _, ax = bar_graph(xStrV[idxV], coeffV[idxV]; 
+        fig, pos, forSubPlot, 
         ylabel = string(yStr), yerror = seV, kwargs...);
 
     if interceptAsText  &&  !isnothing(constIdx)

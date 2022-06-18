@@ -36,7 +36,7 @@ function grouped_bar_xyz(xyzM :: AbstractArray{F1, 3}, xyzLabelV;
         pos = subplot_pos(iSub, nRows, nCols);
         _, axV[iSub] = grouped_bar_graph(xyzLabelV[groupIdx], dataM;
             xLabel = subLabelV[iSub], yLabel = yLabel,
-            fig = fig, pos = pos);
+            fig, pos, forSubPlot = true);
         # makie +++   legendPos = subLegPos,  legendV = make_legend(xyzLabelV[legendIdx]),
     end
     link_axes(axV);

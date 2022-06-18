@@ -18,13 +18,13 @@ grouped_bar_graph(["1", "2"], rand(2, 3); pos = (1,2), yerror = rand(2, 3))
 """
 function grouped_bar_graph(
     xStrV, dataM :: AbstractMatrix{F}; 
-    fig = Figure(), pos = (1,1), 
+    fig = Figure(), pos = (1,1), forSubPlot = false,
     yerror = nothing,  
     kwargs...) where F
 
     ng = length(xStrV);
     @assert size(xStrV, 1) == size(dataM, 1)  "Size mismatch: $(size(xStrV)), $(size(dataM))";
-    ax = make_axis(fig, pos;
+    ax = make_axis(fig, pos; forSubPlot,
         xticks = (1 : ng, xStrV), kwargs...);
 
     grouped_bar_graph!(ax, dataM; yerror = yerror, kwargs...);

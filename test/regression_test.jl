@@ -1,20 +1,21 @@
 using Test
 
-function regression_test(interceptAsText :: Bool)
+function regression_test(interceptAsText :: Bool, forSubPlot :: Bool)
     @testset "Regression $interceptAsText" begin
         nRegr = 5;
         coeffNameV = ["beta$j" for j = 1 : nRegr];
         coeffV = LinRange(0.9, 0.2, nRegr);
         seV = 0.1 .* coeffV;
         p, _ = plot_regression(coeffNameV, "y label", coeffV, seV;
+            forSubPlot,
             interceptAsText = interceptAsText, interceptName = "beta2",
             figTitle = "Figure title");
 
-        fName = "plot_regression";
+        fName = "regression";
         if interceptAsText
             fName = fName * "_interceptAsTest";
         end
-        fPath, notesPath = fig_test_setup("$fName.pdf");
+        fPath, notesPath = fig_test_setup("$fName"; forSubPlot);
         figsave(p, fPath);
         @test isfile(fPath)
 	end
@@ -22,7 +23,6 @@ function regression_test(interceptAsText :: Bool)
 end
 
 function regressions_test(onePlot :: Bool, interceptAsText :: Bool)
-    # rng = MersenneTwister(123);
     @testset "Regressions $onePlot" begin
         nr = 4;
         nRegr = 3;
@@ -40,14 +40,14 @@ function regressions_test(onePlot :: Bool, interceptAsText :: Bool)
         #     coeffM, seM; onePlot = onePlot, figTitle = "Figure title");
         # add_title!(p, "Figure title"; color = :red);
 
-        fName = "plot_regressions";
+        fName = "regressions";
         if onePlot
             fName = fName * "_oneplot";
         end
         if interceptAsText
             fName = fName * "_interceptAsText";
         end
-        fPath, notesPath = fig_test_setup("$fName.pdf");
+        fPath, notesPath = fig_test_setup("$fName");
         figsave(p, fPath);
         @test isfile(fPath)
 	end
@@ -56,8 +56,10 @@ end
 
 @testset "Regression plots" begin
     for interceptAsText in (true, false)
-        regression_test(interceptAsText);
+        regression_test(interceptAsText, false);
     end
+    regression_test(false, true);
+
     for onePlot in (true, false)
         for interceptAsText in (true, false)
             regressions_test(onePlot, interceptAsText);

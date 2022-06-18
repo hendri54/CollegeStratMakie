@@ -8,12 +8,14 @@ Bar graph. Simple wrapper for `barplot` that applies default settings.
 - yerror: errorbars around `dataV`.
 """
 function bar_graph(groupLabelV, dataV; 
-    fig = Figure(), pos = (1,1), yerror = nothing, kwargs...)
+    fig = Figure(), pos = (1,1), forSubPlot = false,
+    yerror = nothing, kwargs...)
     
     @assert size(dataV) == size(groupLabelV);
     n = length(groupLabelV);
-    ax = make_axis(fig, pos; xticks = (1:n, string.(groupLabelV)), kwargs...);
-    barplot!(ax, dataV; kwargs...);
+    ax = make_axis(fig, pos; forSubPlot,
+        xticks = (1:n, string.(groupLabelV)), kwargs...);
+    barplot!(ax, dataV; forSubPlot, kwargs...);
     add_errorbars!(dataV, yerror);
     return fig, ax
 end
@@ -23,9 +25,9 @@ end
 
 Plots bar graph into existing axis or FigurePosition.
 """
-function bar_graph!(ax :: Axis, dataV; yerror = nothing, kwargs...)
+function bar_graph!(ax :: Axis, dataV; 
+        forSubPlot = false, yerror = nothing, kwargs...)
     args = make_args(bar_defaults(), bar_keys(); kwargs...);
-    # args = merge(bar_defaults(), kwargs);
     barplot!(ax, dataV;  args...);
     add_errorbars!(dataV, yerror);
 end
@@ -42,11 +44,12 @@ bar_defaults() = Dict([
 bar_keys() = (:color, :strokewidth);
 
 
-function test_bar_graph()
+function test_bar_graph(; forSubPlot = false)
     n = 10;
     dataV = LinRange(4, 5, n);
     groupLabelV = ["G$j" for j = 1 : n];
     fig, ax = bar_graph(groupLabelV, dataV; 
+        forSubPlot,
         xlabel = "x label", ylabel = "y label", 
         xticks = (1:n, groupLabelV));
     return fig, ax

@@ -40,7 +40,7 @@ function grouped_bar_xyz_test()
                     p, _ = grouped_bar_xyz(m, xyzLabelV;
                         yLabel = yStr, legendPos = :outerright, 
                         groupIdx = groupIdx, subPlotIdx = subPlotIdx);
-                    fName = "plot_by_xyz_$groupIdx$subPlotIdx.pdf";
+                    fName = "plot_by_xyz_$groupIdx$subPlotIdx";
                     fPath, notesPath = fig_test_setup(fName);
                     figsave(p,  fPath);
                     @test isfile(fPath)
