@@ -13,7 +13,7 @@ FilesLH = "69233b93-b644-4f5d-9b2e-8880c8b19068"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 
 [compat]
-CairoMakie = "0.5.7, 0.6, 0.7"
+CairoMakie = "0.6, 0.7, 0.8"
 ColorSchemes = "3.12"
 DocStringExtensions = "0.8, 0.9"
 FileIO = "1.9"

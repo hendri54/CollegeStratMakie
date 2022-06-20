@@ -50,7 +50,7 @@ function subplot2_test()
         for ir = 1 : nr
             for ic = 1 : nc
                 if (ir-1) * nc + ic <= nPlots
-                    ax = make_axis(fig; ir = ir, ic = ic,
+                    ax, _ = make_axis(fig; ir = ir, ic = ic,
                         forSubPlot = true,
                         ylabel = "y label",
                         xticks = (2 : 2 : nx, xTickLbls[2 : 2 : nx]));
@@ -65,7 +65,7 @@ function subplot2_test()
 end
 
 function plot_fct(fig, pos; kwargs...)
-    ax = make_axis(fig, pos; forSubPlot = true,  kwargs...);
+    ax, dUnused = make_axis(fig, pos; forSubPlot = true,  kwargs...);
     add_line!(ax, 1:10, 1:10; kwargs...);
     return ax
 end

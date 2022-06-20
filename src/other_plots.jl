@@ -5,9 +5,10 @@ Histogram.
 """
 function histogram_plot(dataV; 
         fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...)
-    ax = make_axis(fig, pos; forSubPlot, kwargs...);
-    args = make_args(histogram_defaults(), histogram_keys(); kwargs...);
+    ax, dUnused = make_axis(fig, pos; forSubPlot, kwargs...);
+    args, dUnused = make_args(histogram_defaults(), histogram_keys(); dUnused...);
     hist!(ax, dataV; args...); 
+    warn_unused_kwargs(dUnused);
     return fig, ax
 end
 
@@ -26,9 +27,10 @@ Contour plot.
 """
 function contour_plot(x, y, z;
         fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...)
-    ax = make_axis(fig, pos; forSubPlot, kwargs...);
-    args = make_args(contour_defaults(), contour_keys(); kwargs...);
+    ax, dUnused = make_axis(fig, pos; forSubPlot, kwargs...);
+    args, dUnused = make_args(contour_defaults(), contour_keys(); dUnused...);
     contour!(ax, x, y, z; args...);
+    warn_unused_kwargs(dUnused);
     return fig, ax
 end
 

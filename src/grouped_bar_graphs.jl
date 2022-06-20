@@ -24,7 +24,7 @@ function grouped_bar_graph(
 
     ng = length(xStrV);
     @assert size(xStrV, 1) == size(dataM, 1)  "Size mismatch: $(size(xStrV)), $(size(dataM))";
-    ax = make_axis(fig, pos; forSubPlot,
+    ax, dUnused = make_axis(fig, pos; forSubPlot,
         xticks = (1 : ng, xStrV), kwargs...);
 
     grouped_bar_graph!(ax, dataM; yerror = yerror, kwargs...);
@@ -43,7 +43,7 @@ function grouped_bar_graph!(ax :: Axis, dataM :: AbstractMatrix{F};
     if !isnothing(yerror)
         @assert size(yerror) == size(dataM)  "Size mismatch yerror";
     end
-    args = make_args(grouped_bar_defaults(), grouped_bar_keys(); kwargs...);
+    args, dUnused = make_args(grouped_bar_defaults(), grouped_bar_keys(); kwargs...);
     nr, nc = size(dataM);
     xV = repeat(1 : nr; outer = (nc,));
     grps = groups_from_rows(nr, nc);

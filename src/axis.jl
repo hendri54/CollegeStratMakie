@@ -21,10 +21,14 @@ Make an axis in a given figure position.
 Various text elements are smaller when this is in a subplot.
 """
 function make_axis(fig; ir :: Integer = 1, ic :: Integer = 1,
-	forSubPlot :: Bool = false, kwargs...)
-    args = axis_args(; forSubPlot, kwargs...);
+	    forSubPlot :: Bool = false, xlims = nothing, ylims = nothing, 
+        kwargs...)
+    args, dUnused = axis_args(; forSubPlot, kwargs...);
     ax = fig[ir, ic] = Axis(fig; args...);
-    return ax
+    isnothing(xlims)  ||  xlims!(ax, xlims);
+    isnothing(ylims)  ||  ylims!(ax, ylims);
+    # remove those keys from dUnused +++++
+    return ax, dUnused
 end
 
 
@@ -35,7 +39,7 @@ end
 Given a set of keyword arguments, return a `Dict` with valid arguments for creating an axis, including defaults from `axis_defaults`.
 """
 function axis_args(; forSubPlot :: Bool = false, kwargs...)
-	dOut = make_args(axis_defaults(; forSubPlot), axis_keys(); kwargs...);
+	dOut, dUnused = make_args(axis_defaults(; forSubPlot), axis_keys(); kwargs...);
 	# dIn = merge(axis_defaults(), kwargs);
 	# # dArgs = Dict(kwargs...);
 	# # dDefaults = axis_defaults();
@@ -46,7 +50,7 @@ function axis_args(; forSubPlot :: Bool = false, kwargs...)
 	# 		dOut[k] = v;
 	# 	end
 	# end
-	return dOut
+	return dOut, dUnused
 end
 
 
@@ -67,13 +71,19 @@ function check_axis_args(d)
 end
 
 
-# Permitted axis kw args.
+"""
+	$(SIGNATURES)
+
+Permitted kwargs when creating an `Axis`.
+
+Notes:
+- `xlims` have to be set with `xlims!` or `limits!`.
+"""
 axis_keys() = (
     :xlabel, :ylabel, 
     :xlabelsize, :ylabelsize,
     :xticks, :yticks,
-    :xticklabelsize, :yticklabelsize, 
-    :xlims, :ylims);
+    :xticklabelsize, :yticklabelsize);
 
 
 function axis_defaults(; forSubPlot :: Bool = false)

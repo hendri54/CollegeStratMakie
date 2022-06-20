@@ -17,13 +17,15 @@ end
 
 function axis_test(forSubPlot)
     @testset "Axis" begin
-        ax = make_axis(blank_plot(), (1,1); forSubPlot,
-            xticklabelsize = 12, xlims = [2, 3]);
+
+        ax, dUnused = make_axis(blank_plot(), (1,1); forSubPlot,
+            xticklabelsize = 12);
         @test ax isa Axis;
 
-        d = csp.axis_args(; forSubPlot, xlims = [2, 3], 
+        xTickSize = 10;
+        d, dUnused = csp.axis_args(; forSubPlot, xticklabelsize = xTickSize, 
             notValid = 99);
-        @test d[:xlims] == [2,3];
+        @test d[:xticklabelsize] == xTickSize;
         @test check_axis_args(d);
     end
 end

@@ -64,9 +64,10 @@ function plot_regression(xStrV, yStr,
         seV = seV[idxV];
     end
 
+    args, _ = make_args(bar_defaults(), bar_keys(); kwargs...);
     _, ax = bar_graph(xStrV[idxV], coeffV[idxV]; 
         fig, pos, forSubPlot, 
-        ylabel = string(yStr), yerror = seV, kwargs...);
+        ylabel = string(yStr), yerror = seV, args...);
 
     if interceptAsText  &&  !isnothing(constIdx)
         show_intercept_text(ax, coeffV, seV, constIdx);

@@ -10,11 +10,12 @@ line_keys() = (:color, );
 Line graph. Simple wrapper around `lines`.
 """
 function line_plot(xV, yV :: AbstractVector{F};
-    fig = blank_plot(), pos = (1,1), kwargs...) where F
+    fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...) where F
 
     # args = merge(line_defaults(), kwargs);
-    ax = make_axis(fig, pos; kwargs...);
-    args = make_args(line_defaults(), line_keys(); kwargs...);
+    ax, dUnused = make_axis(fig, pos; forSubPlot, kwargs...);
+    args, dUnused = make_args(line_defaults(), line_keys(); dUnused...);
+    warn_unused_kwargs(dUnused);
     lines!(ax, xV, yV; args...);
     return fig, ax
 end
@@ -47,13 +48,13 @@ axislegend()
 ```
 """
 function line_plot(xV, yM :: AbstractMatrix{F}; 
-    fig = blank_plot(), pos = (1,1),
+    fig = blank_plot(), pos = (1,1), forSubPlot = false,
     legPos = :none, labelV = nothing,
     kwargs...) where F
 
-    # args = merge(line_defaults(), kwargs);
-    ax = make_axis(fig, pos; kwargs...);
-    line_plot!(ax, xV, yM; labelV, kwargs...);
+    ax, dUnused = make_axis(fig, pos; forSubPlot, kwargs...);
+    dUnused = line_plot!(ax, xV, yM; labelV, dUnused...);
+    warn_unused_kwargs(dUnused);
 
     if !isnothing(labelV)  &&  (legPos == :below)
         legPos = (pos[1] + 1, pos[2]);
@@ -66,7 +67,7 @@ end
 
 function line_plot!(ax, xV, yM :: AbstractMatrix{F}; 
         labelV = nothing, kwargs...) where F
-    args = make_args(line_defaults(), line_keys(); kwargs...);
+    args, dUnused = make_args(line_defaults(), line_keys(); kwargs...);
     nr, nc = size(yM);
     @assert nr == length(xV);
     for j = 1 : nc
@@ -77,6 +78,7 @@ function line_plot!(ax, xV, yM :: AbstractMatrix{F};
             # color = fill(j, nr), colorrange = (1, nc),
             args...);
     end
+    return dUnused
 end
 
 

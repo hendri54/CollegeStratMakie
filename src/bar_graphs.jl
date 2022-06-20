@@ -13,9 +13,11 @@ function bar_graph(groupLabelV, dataV;
     
     @assert size(dataV) == size(groupLabelV);
     n = length(groupLabelV);
-    ax = make_axis(fig, pos; forSubPlot,
+    ax, dUnused = make_axis(fig, pos; forSubPlot,
         xticks = (1:n, string.(groupLabelV)), kwargs...);
-    barplot!(ax, dataV; forSubPlot, kwargs...);
+    args, dUnused = make_args(bar_defaults(), bar_keys(); dUnused...);
+    warn_unused_kwargs(dUnused);
+    barplot!(ax, dataV; forSubPlot, args...);
     add_errorbars!(dataV, yerror);
     return fig, ax
 end
@@ -27,9 +29,10 @@ Plots bar graph into existing axis or FigurePosition.
 """
 function bar_graph!(ax :: Axis, dataV; 
         forSubPlot = false, yerror = nothing, kwargs...)
-    args = make_args(bar_defaults(), bar_keys(); kwargs...);
+    args, dUnused = make_args(bar_defaults(), bar_keys(); kwargs...);
     barplot!(ax, dataV;  args...);
     add_errorbars!(dataV, yerror);
+    return dUnused
 end
 
 add_errorbars!(dataV, yerror) = 

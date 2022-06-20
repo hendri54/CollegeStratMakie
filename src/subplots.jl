@@ -45,7 +45,7 @@ function make_axes!(fig, nPlots :: Integer; kwargs...)
         for ic = 1 : nc
             if (ir * ic) <= nPlots
                 j = (ir-1) * nc + ic;
-                axV[j] = make_axis(fig, (ir, ic); forSubPlot = true, kwargs...);
+                axV[j], _ = make_axis(fig, (ir, ic); forSubPlot = true, kwargs...);
             end
         end
     end
