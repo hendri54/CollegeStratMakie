@@ -5,7 +5,7 @@ csp = CollegeStratMakie;
 
 function fig_test_setup(figName; forSubPlot = false)
     suffix = forSubPlot  ?  "_subplot"  :  "";
-    fPath = joinpath(csp.pkg_test_dir(), figName * suffix * ".pdf");
+    fPath = joinpath(csp.pkg_test_dir(), figName * suffix * "." * FigExtension);
     notesPath = csp.fig_notes_path(fPath);
     isfile(fPath)  &&  rm(fPath);
     isfile(notesPath)  &&  rm(notesPath);
@@ -69,9 +69,9 @@ function bar_graph_test(forSubPlot)
 end
 
 
-function grouped_bar_test()
+function grouped_bar_test(forSubPlot)
     @testset "Grouped bar graph" begin
-        fPath, notesPath = fig_test_setup("grouped_bar");
+        fPath, notesPath = fig_test_setup("grouped_bar"; forSubPlot);
         # 4 groups of 6 bars each
         nr = 4; nc = 6;
         # Bar labels (one for each column)
@@ -79,12 +79,12 @@ function grouped_bar_test()
         labelV = ["Lbl $j" for j = 1 : nc];
         dataM = (10 .*(1:nr)) .+ (1 : nc)';
         yerrorM = 0.1 .* dataM;
-        fig, _ = grouped_bar_graph(grpLabelV, dataM; 
-            yerror = yerrorM,
-            legendPos = (1,2), xlabel = "x", ylabel = "y");
-        # Cannot create fig[1,2] first
-        # not having a title may not work either
-        grouped_bar_legend(fig[1,2], labelV; title = "Bars");
+        fig, ax = grouped_bar_graph(grpLabelV, dataM; 
+            forSubPlot, yerror = yerrorM,
+            xlabel = "x", ylabel = "y");
+        legPos, legArgs = legend_args(1, 1, :outerbottom; forSubPlot);
+        grouped_bar_legend(fig[legPos...], labelV; 
+            forSubPlot, title = "Bars", legArgs...);
         figsave(fig, fPath; figNotes = ["Notes"]);
         @test isfile(fPath)
         @test isfile(notesPath)
@@ -193,13 +193,13 @@ end
         scatter_plot_test(forSubPlot);
         contour_test(forSubPlot);
         histogram_test(forSubPlot);
+        grouped_bar_test(forSubPlot);
     end
 
     line_error_bands_test();
     add_line_test();
     add_scatter_test();
 
-    grouped_bar_test();
     include("subplot_test.jl");
     include("regression_test.jl");
     include("xyz_test.jl");

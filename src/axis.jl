@@ -17,8 +17,9 @@ end
 	$(SIGNATURES)
 
 Make an axis in a given figure position.
-
 Various text elements are smaller when this is in a subplot.
+
+Returns Axis and unused keyword args.
 """
 function make_axis(fig; ir :: Integer = 1, ic :: Integer = 1,
 	    forSubPlot :: Bool = false, xlims = nothing, ylims = nothing, 
@@ -27,7 +28,8 @@ function make_axis(fig; ir :: Integer = 1, ic :: Integer = 1,
     ax = fig[ir, ic] = Axis(fig; args...);
     isnothing(xlims)  ||  xlims!(ax, xlims);
     isnothing(ylims)  ||  ylims!(ax, ylims);
-    # remove those keys from dUnused +++++
+    delete!(dUnused, :xlims);
+    delete!(dUnused, :ylims);
     return ax, dUnused
 end
 
@@ -95,13 +97,16 @@ function axis_defaults(; forSubPlot :: Bool = false)
     return d
 end
 
-oneplot_defaults() = Dict{Symbol, Any}([
-        :xlabel => ""
+function oneplot_defaults()
+    textSize = default_text_size();
+    return Dict{Symbol, Any}([
+        :xlabelsize => textSize,
+        :ylabelsize => textSize
     ]);
-
+end
 
 function subplot_defaults()
-    textSize = 8;
+    textSize = subplot_text_size();
     return Dict{Symbol, Any}([
         :xticklabelsize => textSize,
         :yticklabelsize => textSize,

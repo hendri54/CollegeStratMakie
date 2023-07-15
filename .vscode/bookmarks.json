@@ -1,0 +1,24 @@
+{
+	"files": [
+		{
+			"path": "src/axis.jl",
+			"bookmarks": [
+				{
+					"line": 23,
+					"column": 15,
+					"label": ""
+				}
+			]
+		},
+		{
+			"path": "src/settings.jl",
+			"bookmarks": [
+				{
+					"line": 17,
+					"column": 17,
+					"label": ""
+				}
+			]
+		}
+	]
+}

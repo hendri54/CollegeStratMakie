@@ -4,6 +4,12 @@
 Stacked bar graphs for a matrix by (x,y,z).
 Dimension `subPlotIdx` is used for subplots. Dimension `groupIdx` is used to group bars. The remaining dimension makes the bars in each group.
 
+# Arguments
+- `xyzM`: 3D data array.
+- `xyzlabelV`: Vector of labels for x, y, z groups.
+Optional:
+- `legendPos`: legend position; may be `:none`.
+
 # Example
 ```julia
 grouped_bar_xyz(xyzM, [["x1" "x2"], ["y1", "y2"], ["z1", "z2", z3"]];
@@ -11,7 +17,7 @@ grouped_bar_xyz(xyzM, [["x1" "x2"], ["y1", "y2"], ["z1", "z2", z3"]];
 ```
 """
 function grouped_bar_xyz(xyzM :: AbstractArray{F1, 3}, xyzLabelV;
-    yLabel :: AbstractString, legendPos = :best,
+    yLabel :: AbstractString, legendPos = :best, linkAxes = true,
     groupIdx :: Integer = 2, subPlotIdx :: Integer = 3) where F1 <: Number
 
     nSub = size(xyzM, subPlotIdx);
@@ -35,12 +41,16 @@ function grouped_bar_xyz(xyzM :: AbstractArray{F1, 3}, xyzLabelV;
         end
         pos = subplot_pos(iSub, nRows, nCols);
         _, axV[iSub] = grouped_bar_graph(xyzLabelV[groupIdx], dataM;
-            xLabel = subLabelV[iSub], yLabel = yLabel,
+            xlabel = subLabelV[iSub], ylabel = yLabel,
             fig, pos, forSubPlot = true);
-        # makie +++   legendPos = subLegPos,  legendV = make_legend(xyzLabelV[legendIdx]),
     end
-    link_axes(axV);
-    # p = plot(pV..., link = :all);
+
+    linkAxes  &&  link_axes(axV);
+
+    if legendPos != :none
+        legPos, legArgs = legend_args(nRows, nCols, legendPos);
+        grouped_bar_legend(fig[legPos...], xyzLabelV[legendIdx];  legArgs...);
+    end
     return fig, axV
 end
 

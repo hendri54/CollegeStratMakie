@@ -1,12 +1,12 @@
 module CollegeStratMakie
 
-using DocStringExtensions, FileIO, StatsBase
+using CSV, DataFrames, DocStringExtensions, FileIO, StatsBase
 using CairoMakie, ColorSchemes
 using FilesLH
 using CollegeStratBase
 
 # Helpers
-export blank_plot, make_axis, make_legend, add_title!
+export blank_plot, make_axis, legend_args, make_legend, legend_horizontal, add_title!;
 # Settings
 export default_theme, plot_defaults, get_colors
 # Saving

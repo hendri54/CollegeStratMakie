@@ -1,13 +1,20 @@
 """
 	$(SIGNATURES)
 
-Histogram.
+Histogram. Optional weights.
 """
 function histogram_plot(dataV; 
-        fig = blank_plot(), pos = (1,1), forSubPlot = false, kwargs...)
+        fig = blank_plot(), pos = (1,1), 
+        forSubPlot = false, weights = nothing, kwargs...)
     ax, dUnused = make_axis(fig, pos; forSubPlot, kwargs...);
     args, dUnused = make_args(histogram_defaults(), histogram_keys(); dUnused...);
-    hist!(ax, dataV; args...); 
+    if isnothing(weights)
+        hist!(ax, dataV; args...); 
+    # hist1 = data((x = dataV, )) * mapping(:x) * visual(Hist, strokewidth = 2);
+    # draw!(ax, hist1);
+    else
+        hist!(ax, dataV; weights, args...);
+    end
     warn_unused_kwargs(dUnused);
     return fig, ax
 end
@@ -17,7 +24,7 @@ histogram_defaults() = Dict([
     :color => main_color()
 ]);
 
-histogram_keys() = (:color, :strokewidth);
+histogram_keys() = (:color, :strokewidth, :normalization);
 
 
 """

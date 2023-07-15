@@ -38,10 +38,7 @@ This is really the same as `Makie.series`.
 - legPos: `:below` places a legend below the graph (in a new frame).
 - labelV: labels for legend (optional).
 
-Fix: Legend colors are wrong +++
-
 # Example
-
 ```julia
 fig, ax = line_plot(1:4, rand(4,3); labelV = ["Lbl \$j" for j = 1 : 3]);
 axislegend()
@@ -58,11 +55,18 @@ function line_plot(xV, yM :: AbstractMatrix{F};
 
     if !isnothing(labelV)  &&  (legPos == :below)
         legPos = (pos[1] + 1, pos[2]);
-        fig[legPos...] = Legend(fig, ax; 
-            orientation = :horizontal, 
-            tellwidth = false, tellheight = true);
+        legend_horizontal(fig, ax, legPos);
+        # fig[legPos...] = Legend(fig, ax; 
+        #     orientation = :horizontal, 
+        #     tellwidth = false, tellheight = true);
     end
     return fig, ax
+end
+
+function legend_horizontal(fig, ax, legPos)
+    fig[legPos...] = Legend(fig, ax; 
+        orientation = :horizontal, 
+        tellwidth = false, tellheight = true);
 end
 
 function line_plot!(ax, xV, yM :: AbstractMatrix{F}; 

@@ -40,15 +40,6 @@ Make `kwargs` from a `Dict` with defaults and a set of valid keys.
 function make_args(defaultDict, validKeys; kwargs...)
 	dValid, dUnused = split_args(validKeys; kwargs...);
 	dOut = merge(defaultDict, dValid);
-	# dOut = Dict{Symbol, Any}();
-	# axKeys = validKeys;
-	# for (k,v) in dIn
-	# 	if k ∈ axKeys
-	# 		dOut[k] = v;
-	# 	# else
-	# 	# 	@warn "Unknown plot argument $k";
-	# 	end
-	# end
 	return dOut, dUnused
 end
 
@@ -66,8 +57,37 @@ end
 
 Legends are string vectors. `nothing` is passed through.
 """
-make_legend(v) = string.(v);
+make_legend(v) = string.(vec(v));
 make_legend(::Nothing) = nothing;
+
+
+"""
+	$(SIGNATURES)
+
+Return legend position and kwargs needed to format the legend.
+
+# Example
+```julia
+legPos, legArgs = legend_args(4, 3, :outerbottom);
+grouped_bar_legend(fig[legPos...], labelV; legArgs...);
+```
+"""
+function legend_args(nRows, nCols, legendPos; forSubPlot = false)
+    if legendPos == :outerbottom
+        legPos = (nRows + 1, 1 : nCols);
+        orientation = :horizontal;
+    else  # if legendPos == :outerright
+        legPos = (1 : nRows, nCols + 1);
+        orientation = :vertical;
+    end
+	tellheight = (orientation == :horizontal);
+	d = Dict([
+		:orientation => orientation, 
+		:tellheight => tellheight,
+		:labelsize => plot_text_size(forSubPlot)
+		]);
+	return legPos, d
+end
 
 
 # Retrieve an element from a vector; or return nothing.

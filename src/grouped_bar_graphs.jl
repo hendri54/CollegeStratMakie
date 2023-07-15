@@ -27,7 +27,7 @@ function grouped_bar_graph(
     ax, dUnused = make_axis(fig, pos; forSubPlot,
         xticks = (1 : ng, xStrV), kwargs...);
 
-    grouped_bar_graph!(ax, dataM; yerror = yerror, kwargs...);
+    grouped_bar_graph!(ax, dataM; yerror = yerror, dUnused...);
     return fig, ax
 end
 
@@ -73,26 +73,29 @@ bars_from_columns(nr, nc) = repeat(1 : nc; inner = (nr,));
 """
 	$(SIGNATURES)
 
-Places a legend into Axis `ax`. Uses the same colors as for grouped bar graph.
-`title` cannot be "". That throws an error. Useful not just for grouped bar graphs, but also for any kind of subplot.
-
-This needs to be plotted into a blank axis. Otherwise the legend position is odd.
+Places a legend into a figure position `pos`. Uses the same colors as for grouped bar graph.
+Useful not just for grouped bar graphs, but also for any kind of subplot.
 
 For horizontal legends: `tellheight = true` prevents vertical spacing issues.
 
-Should be improved +++.
+# Arguments
+- `pos`: Figure position, such as `fig[2,1]`. Cannot be an `Axis`.
+- `title`: cannot be "". That throws an error. 
 
 # Example
-
 ```julia
 fig, ax = grouped_bar_graph(["1", "2"], rand(2, 3));
-grouped_bar_legend(fig[2, 1], colLabelV; orientation = :horizontal, tellheight = true);
+legPos, legArgs = legend_args(1, 1, :outerbottom);
+grouped_bar_legend(fig[2, 1], colLabelV; legArgs...);
 ```
 """
-function grouped_bar_legend(ax, labelV; title = " ", kwargs...)
+function grouped_bar_legend(pos, labelV :: AbstractVector{String}; 
+        title = nothing, forSubPlot = false,
+        orientation = :vertical, tellheight = (orientation == :horizontal), kwargs...)
     n = length(labelV);
-    elements = [PolyElement(polycolor = get_colors(i, n)) for i in 1:n];
-    Legend(ax, elements, labelV, title; kwargs...);
+    elements = [PolyElement(color = get_colors(i, n)) for i in 1:n];
+    # @show elements
+    Legend(pos, elements, labelV, title; orientation, tellheight, kwargs...);
 end
 
 

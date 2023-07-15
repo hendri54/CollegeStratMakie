@@ -36,9 +36,10 @@ function grouped_bar_xyz_test()
 
         for subPlotIdx = 1 : 3
             for groupIdx = 1 : 3
+                legendPos = (iseven(groupIdx)  ?  :outerbottom  :  :outerright);
                 if groupIdx != subPlotIdx
                     p, _ = grouped_bar_xyz(m, xyzLabelV;
-                        yLabel = yStr, legendPos = :outerright, 
+                        yLabel = yStr, legendPos, 
                         groupIdx = groupIdx, subPlotIdx = subPlotIdx);
                     fName = "plot_by_xyz_$groupIdx$subPlotIdx";
                     fPath, notesPath = fig_test_setup(fName);

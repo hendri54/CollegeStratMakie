@@ -12,9 +12,15 @@ end
 	$(SIGNATURES)
 
 Default theme. Note that `Makie` also exports `default_theme`.
+
+CairoMakie 0.8: theme ggplot2 does not show legends correctly.
 """
 function default_theme()
-    thm = theme_ggplot2();
+    # thm = theme_ggplot2();
+    # thm = theme_minimal();
+    # This effectively sets the default theme (for which no command exists).
+    thm = Theme(Lines = (linewidth = 3, ));
+
     update_theme!(thm;  
         # Lines = (linewidth = 3),  # causes errors
         linewidth = 3,
@@ -32,7 +38,7 @@ default_color_scheme() = ColorSchemes.corkO;
 
 Color used for a single color graph.
 """
-main_color() = get_colors(1, 5);
+main_color() = get_colors(2, 6);
 
 get_colors(idx) = default_color_scheme()[idx];
 
@@ -48,6 +54,15 @@ function get_colors(idx, nMax :: Integer)
     return get_colors(idxV);
     # return get_colors(idxV[idx])
 end
+
+
+## ------------  Text settings
+
+plot_text_size(forSubPlot :: Bool) = 
+    forSubPlot  ?  subplot_text_size()  :  default_text_size();
+
+default_text_size() = 14;
+subplot_text_size() = 12;
 
 
 # -----------
